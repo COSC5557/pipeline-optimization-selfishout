@@ -57,14 +57,20 @@ print(f"Accuracy without hyperparameter optimization: {simple_accuracy:.2f}")
 
 
 param_grid = {
-    # 'preprocessor__num__imputer__strategy': ['mean', 'median'],
+    # 'preprocessor__num__scaler__scaler': [StandardScaler(), None],
+    'preprocessor__pca__n_components': [None, 5, 10, 15, 20, 25, 30],
+    'preprocessor__num__numeric__scaler': [StandardScaler(), PassthroughScaler()],
+    'preprocessor__num__imputer__strategy': ['mean', 'median', 'most_frequent'],
+    'preprocessor__num__scaler__with_mean': [True, False],
+    'preprocessor__num__scaler__with_std': [True, False],
+    # 'preprocessor__cat__imputer__strategy': ['most_frequent', 'constant', 'mean'],
+    'preprocessing__categoricals__onehot__handle_unknown': ['ignore', 'error'],
     'classifier__n_estimators': [50, 100, 200, 300, 400, 500, 600],
     'classifier__learning_rate': [0.01, 0.1, 0.2, 0.3],
     'classifier__max_depth': [x for x in range(3, 16)],
     'classifier__min_samples_split': [x for x in range(2, 21)],
     'classifier__min_samples_leaf': [1, 2, 4]
 }
-
 random_search = RandomizedSearchCV(pipeline, param_distributions=param_grid, n_iter=10, cv=5, random_state=42)
 
 
